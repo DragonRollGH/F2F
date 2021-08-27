@@ -2,16 +2,15 @@
 <view class="container">
 <view class="center">
   <view class="timeBlock">
-    <text decode="true">ST\n{{ST}}</text>
+    <text decode="true">开始时间\n{{ST}}</text>
   </view>
   <view class="timeBlock">
-    <text decode="true">ET\n{{ET}}</text>
+    <text decode="true">结束时间\n{{ET}}</text>
   </view>
 </view>
-
 <view class="center">
   <button class="mainBtn" bindtap="mainBtn">
-    <text class="mainBtnTxt">{{mainBtnTxt}}</text>
+    <text class="mainBtnTxt" style="color: {{mainBtnClr}};">{{mainBtnTxt}}</text>
   </button>
 </view>
 </view>
