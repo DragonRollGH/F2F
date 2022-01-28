@@ -5,7 +5,7 @@ page {
 }
 
 .timeBlock {
-  background: #d3f1e2;
+  background: hsl(223, 33%, 80%);
   width: 40%;
   margin: auto;
   padding-top: 20rpx;
@@ -23,11 +23,11 @@ page {
 }
 
 .mainBtn {
-  margin-top: 20%;
+  margin-top: 10%;
   width: 400rpx !important;
   height: 400rpx;
   border-radius: 200rpx;
-  background-color: #07c160;
+  background-color: rgb(0, 47, 167);
   justify-content: center;
   box-shadow: 10rpx 10rpx 10rpx #00000020;
 }

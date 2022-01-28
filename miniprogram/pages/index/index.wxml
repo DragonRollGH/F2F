@@ -14,3 +14,7 @@
   </button>
 </view>
 </view>
+
+<view class='a' wx:for="{{timeTable}}">
+  <view>{{item.DT}} | {{item.ST}} | {{item.ET}}</view>
+</view>
