@@ -1,4 +1,6 @@
-/**app.wxss**/
+@import "colorui/main.wxss";
+@import "colorui/icon.wxss";
+/* *app.wxss*
 .container {
   display: flex;
   flex-direction: column;
@@ -153,4 +155,4 @@ page {
   font-size: 24rpx;
   line-height: 36rpx;
   word-break: break-all;
-}
+} */

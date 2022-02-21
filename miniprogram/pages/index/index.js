@@ -2,11 +2,12 @@
 const app = getApp();
 var page;
 const db = wx.cloud.database();
-const tb = db.collection('F2F')
+// const tb = db.collection('F2F');
 
 var isF2F;
 var lastF2F;
 var timeStamp = new Date().getTime();
+var show = 0;
 
 function checkin() {
   let now = new Date();
@@ -137,6 +138,14 @@ function onLoad() {
       });
     }
   },1000);
+  wx.getSystemInfo({
+    success: e => {
+      this.globalData.StatusBar = e.statusBarHeight;
+      let custom = wx.getMenuButtonBoundingClientRect();
+      this.globalData.Custom = custom;  
+      this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
+    }
+  });
 }
 
 
@@ -146,8 +155,37 @@ Page({
     mainBtnClr: "white",
     ST: "&nbsp;",
     ET: "&nbsp;",
+    listData:[
+      {"code":"01","text":"text1","type":"type1"},
+      {"code":"02","text":"text2","type":"type2"},
+      {"code":"03","text":"text3","type":"type3"},
+      {"code":"04","text":"text4","type":"type4"},
+      {"code":"05","text":"text5","type":"type5"},
+      {"code":"06","text":"text6","type":"type6"},
+      {"code":"07","text":"text7","type":"type7"}
+    ],
+    show: show,
+    fold: [
+      {i:2200, n:'2022', v:0, m:[
+        {i:2201, n:'&emsp;2022-01',v:0},
+        {i:2202, n:'&emsp;2022-02',v:1},
+      ]},
+      {i:2100, n:'2021', v:1, m:[
+        {i:2101, n:'&emsp;2021-01',v:1},
+        {i:2102, n:'&emsp;2021-02',v:1},
+      ]},
+    ],
   },
   mainBtn: mainBtn,
   onLoad: onLoad,
-
+  ontap1: ()=>{
+    show = !show;
+    page.setData({
+      show:show,
+      fold:{
+        code: 0,
+      }
+    })
+    console.log("1");
+  }
 })
