@@ -1,0 +1,12 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "@vant/weapp": {
+      "integrity": "sha512-caqA0xQxM4lMRncFsRPPVMDdEzUBCJ4xdFXuKReXpEU3qwnVIP/WIjVDIi7mWyS7xqz8C9WfSW5JL4PrlSq31w==",
+      "resolved": "https://registry.npmjs.org/@vant/weapp/-/weapp-1.10.2.tgz",
+      "version": "1.10.2"
+    },
+    "vant-weapp": "^0.5.29"
+  }
+}

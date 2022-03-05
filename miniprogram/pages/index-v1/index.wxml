@@ -1,0 +1,76 @@
+<!--index.wxml-->
+<view class="container">
+<view class="center">
+  <view class="timeBlock">
+    <text decode="true">开始时间\n{{ST}}</text>
+  </view>
+  <view class="timeBlock">
+    <text decode="true">结束时间\n{{ET}}</text>
+  </view>
+</view>
+<view class="center">
+  <button class="mainBtn" bindtap="mainBtn">
+    <text class="mainBtnTxt" style="color: {{mainBtnClr}};">{{mainBtnTxt}}</text>
+  </button>
+</view>
+</view>
+
+<view class='a' wx:for="{{timeTable}}">
+  <view>{{item.DT}} | {{item.ST}} | {{item.ET}}</view>
+</view>
+
+<view class="cu-list menu" catchtap="ontap1">
+  <block wx:for="{{fold}}">
+    <view id="{{item.i}}" class="cu-item" catchtap="tapYear">
+      <text class="text-grey text-lg">{{item.n}}</text>
+    </view>
+    <block wx:if="{{!item.v}}">
+      <block wx:for="{{item.m}}">
+        <view id="{{item.i}}" class="cu-item" catchtap="tapMonth">
+          <text class="text-grey" decode="true">{{item.n}}</text>
+        </view>
+        <block wx:if="{{!item.v}}">
+            <view id="{{item.i}}" class="cu-item" catchtap="tapMonth">
+              <view class="content">
+                <view>
+                  <text class="text-xl">2022-02-21 17:00 ~ 2022-02-21 19:00</text>
+                </view>
+                <view>
+                  E2206
+                </view>
+              </view> 
+            </view>
+        </block>
+      </block>
+    </block>
+  </block>
+</view>
+
+<view class="cu-list menu">
+  <view class="cu-item" >
+    <view class="content">
+      <text class="text-grey">图标 + 标题</text>
+      <text class="cuIcon-unfold text-grey"></text>
+    </view>
+  </view>
+  <block wx:if="{{show}}">
+  <view class="cu-item {{menuArrow?'arrow':''}}">
+    <view class="content">
+      <text class="text-grey">图片 + 标题</text>
+    </view>
+  </view>
+  </block>
+  <view class="cu-item">
+    <view class="content padding-tb-sm">
+      <view>
+        <text class="cuIcon-clothesfill text-blue margin-right-xs"></text> 多行Item
+      </view>
+      <view class="text-gray text-sm">
+        <text class="cuIcon-infofill margin-right-xs"></text> 小目标还没有实现
+        </view>
+    </view>
+    <view class="action">
+      <switch class="switch-sex sm" bindchange="switchSex"></switch>
+    </view>
+  </view>
+</view>
