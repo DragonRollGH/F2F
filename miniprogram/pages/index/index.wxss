@@ -79,6 +79,7 @@ page {
 .address_card {
   display: flex;
   margin: 40rpx 0;
+  /* background-color: blueviolet; */
 }
 
 .address_bar {
@@ -96,6 +97,7 @@ page {
 .address_address {
   font-size: 50rpx;
   font-weight: 500;
+  margin:20rpx 0;
 }
 
 .address_content {
