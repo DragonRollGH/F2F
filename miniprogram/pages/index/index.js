@@ -131,6 +131,9 @@ function onInputConfirm(e) {
   edit.value = e.detail.value;
 }
 
+function onCalendarConfirm(e) {
+  console.log(e);
+}
 
 Page({
   data:{
@@ -140,8 +143,5 @@ Page({
   onLoad: onLoad,
   pressToEdit: pressToEdit,
   modalShow: modalShow,
-  onModalConfirm: onModalConfirm,
-  onModalCancel: onModalCancel,
-  onInputPress: onInputPress,
-  onInputConfirm: onInputConfirm,
+  onCalendarConfirm: onCalendarConfirm,
 })
