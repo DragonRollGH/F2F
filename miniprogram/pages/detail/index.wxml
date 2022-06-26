@@ -1,109 +1,42 @@
-<!--index.wxml-->
-<demo-block title="平铺展示">
-  <van-calendar
-    title="日历"
-    poppable="{{ false }}"
-    show-confirm="{{ false }}"
-    min-date="{{ 1640966400000 }}"
-    class="tiled-calendar"
-  />
-</demo-block>
-
-<van-calendar-demo />
-
-<modal hidden="{{modal_hidden}}" bindconfirm="onModalConfirm" bindcancel="onModalCancel">
-  <input value="{{input_value}}" bindlongpress="onInputPress" bindconfirm="onInputConfirm"/>
-</modal>
-
 <view class="date_view">
-    <text class="center date_date">MARCH  4th</text>
-    <text class="right date_no">No.{{DETAIL.NO}}</text>
+    <text class="center date_date">{{ mm_val }} {{ dd_val }}th</text>
+    <text class="right date_no">No.{{ no_val }}</text>
 </view>
 
 <view class="center time_view">
-  <view id="ST" class="time_block" bindlongpress="pressToEdit">
-    <text class="time_title left">START</text>
-    <text class="time_time">{{DETAIL.ST}}</text>
+  <view id="st" class="time_block" bindlongpress="pressToEdit">
+    <text class="time_title">START</text>
+    <text class="time_time center">{{ st_val }}</text>
   </view>
-  <view id="ET" class="time_block" bindlongpress="pressToEdit">
-    <text class="time_title left">END</text>
-    <text class="time_time">{{DETAIL.ET}}</text>
+  <view id="et" class="time_block" bindlongpress="pressToEdit">
+    <text class="time_title">END</text>
+    <text class="time_time">{{ et_val }}</text>
   </view >
 </view>
 
-<view class="address_view">
-  <block wx:for="{{DETAIL.EV}}" wx:for-index="for_i">
-    <view class="address_card">
+<view class="address_view" >
+  <block wx:for="{{ ev_ary }}">
+    <view id="ev_ary.{{ index }}" class="address_card" bindlongpress="pressToEdit">
       <view class="address_bar"></view>
       <view class="address_text">
-        <!-- <view id="EV.{{for_i}}.LOC.S" class="cuIcon-{{item.LOC.I}} address_address" bindlongpress="pressToEdit">
-        </view> -->
-        <view class="cuIcon-{{item.LOC.I}}" style="display:flex;" ></view>
-        <input class="address_address" value="{{item.LOC.S}}" type="text"/>
-        <view id="EV.{{for_i}}.CON.S" class="cuIcon-{{item.CON.I}} address_content" bindlongpress="pressToEdit">
-          {{item.CON.S}}
-        </view>
+        <view class="cuIcon-location address_address">{{ item.site }}</view>
+        <view class="address_content">{{ item.type }}</view>
         <view class="address_line"></view>
-        <block wx:for="{{item.DET}}" wx:for-index="for_j">
-          <view id="EV.{{for_i}}.DET.{{for_j}}.S" class="cuIcon-{{item.I}}" bindlongpress="pressToEdit">
-            {{item.S}}
-          </view>
-        </block>
+        <text class="address_detail">{{ item.info }}</text>
       </view>
     </view>
   </block>
 </view>
 
+<button bindtap="on_tap_add_btn"> ADD </button>
 
-
-<view class="date_view">
-    <text class="center date_date">MARCH  4th</text>
-    <text class="right date_no">No.XXX</text>
-</view>
-
-<view class="center time_view">
-  <view class="time_block">
-    <text class="time_title left">START(-1)</text>
-    <text class="time_time" decode="true">00:00</text>
-  </view>
-  <view class="time_block">
-    <text class="time_title left">END</text>
-    <text class="time_time" decode="true">00:00</text>
-  </view>
-</view>
-
-<view class="address_view">
-  <!-- <text class="address_title">ADDRESS</text> -->
-  <view class="address_card">
-    <view class="address_bar"></view>
-    <view class="address_text">
-      <view class="cuIcon-location address_address">
-        地点
-      </view>
-      <view class="address_content">散步</view>
-      <view class="address_line"></view>
-      <view class="cuIcon-footprint">
-        食物
-      </view>
-      <view class="cuIcon-cart address_detail">
-        购买
-      </view>
-    </view>
-  </view>
-  <view class="address_card">
-    <view class="address_bar"></view>
-    <view class="address_text">
-      <view class="cuIcon-location address_address">
-        地点
-      </view>
-      <view class="address_content">野餐</view>
-      <view class="address_line"></view>
-      <view class="cuIcon-footprint">
-        食物
-      </view>
-      <view class="cuIcon-cart address_detail">
-        购买
-      </view>
-    </view>
-  </view>
-</view>
+<van-popup
+  show="{{ time_picker_pop }}"
+  position="bottom"
+>
+  <van-datetime-picker
+    type="time"
+    value="{{ time_picker_val }}"
+    bind:confirm="onInputConfirm"
+  />
+</van-popup>

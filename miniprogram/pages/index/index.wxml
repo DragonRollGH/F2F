@@ -1,7 +1,12 @@
 <van-calendar
-  poppable="{{ false }}"
-  show-confirm="{{ false }}"
-  min-date="{{ 1640966400000 }}"
-  class="tiled-calendar"
-  bind:confirm="onCalendarConfirm"
+  class = "tiled-calendar"
+  poppable = "{{ false }}"
+  show-title = "{{ false }}"
+  show-subtitle = "{{ false }}"
+  show-confirm = "{{ false }}"
+  min-date = "{{ mindate }}"
+  max-date = "{{ maxdate }}"
+  default-date = "{{ defaultdate }}"
+  formatter = "{{ dayFormatter }}"
+  bind:confirm = "onCalendarConfirm"
 />
