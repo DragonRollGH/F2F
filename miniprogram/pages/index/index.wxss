@@ -20,102 +20,10 @@ page {
   float: left;
 }
 
-.date_view {
-  padding: 80rpx;
-}
-
-.date_date {
-  font-family: Georgia;
-  font-weight: 900; 
-  font-size: 80rpx;
-}
-
-.date_no {
-  font-family: Georgia;
-  font-weight: 600; 
-  font-size: 40rpx;
-}
-
-.time_view {
-  margin: 20rpx 60rpx;
-  display: flex;
-  justify-content: space-between;
-}
-
-.time_block {
-  background: hsl(209, 62%, 49%);
-  width: 280rpx;
-  height: 200rpx;
-  border-radius: 40rpx;
-}
-
-.time_title {
-  font-family: "AcademyEngravedLetPlain", Georgia;
-  font-weight: 600;
-  font-size: 40rpx;
-  margin-left: 20rpx;
-  margin-top: 20rpx;
-  height: 40rpx;
-  color:white;
-}
-
-.time_time {
-  font-family: Times;
-  font-weight: 900;
-  font-size: 80rpx;
-  color:white;
-}
-
-.address_view {
-  margin: 60rpx 60rpx;
-}
-
-.address_title {
-  font-family: Times;
-  font-weight: 900;
-  font-size: 80rpx;
-}
-
-.address_card {
-  display: flex;
-  margin: 40rpx 0;
-  /* background-color: blueviolet; */
-}
-
-.address_bar {
-  width: 20rpx;
-  border-radius: 10rpx;
-  background-color: hsl(209, 62%, 49%);
-  margin-right: 40rpx;
-}
-
-.address_text {
-  width: 100%;
-  font-size: 40rpx;
-}
-
-.address_address {
-  font-size: 50rpx;
-  font-weight: 500;
-  margin:20rpx 0;
-}
-
-.address_content {
-  font-size: 30rpx;
-  color:gray;
-}
-
-.address_line {
-  height: 6rpx;
-  background-color:gray;
-  border-radius: 3rpx;
-  margin-bottom: 30rpx;
-}
-
-.address_detail {
-  margin-top: 20rpx;
+.container {
+  margin: 20rpx;
 }
 
 .tiled-calendar {
-  --calendar-height: 950rpx;
+  --calendar-height: 450px;
 }

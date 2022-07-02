@@ -1,0 +1,66 @@
+<van-dialog id="van-dialog" />
+<van-toast id="van-toast" />
+
+<view class="container">
+  <van-field
+    model:value="{{ site_val }}"
+    label="地点"
+    size="large"
+    title-width="3em" 
+    center
+    use-button-slot
+  >
+    <van-button
+      slot="button"
+      icon="arrow"
+      size="small"
+    />
+  </van-field>
+
+  <van-field
+    model:value="{{ type_val }}"
+    label="类型"
+    size="large"
+    title-width="3em" 
+    center
+    use-button-slot
+    bind:confirm="onChange" 
+  >
+    <van-button
+      slot="button"
+      icon="arrow"
+      size="small"
+    />
+  </van-field>
+
+  <van-field
+    model:value="{{ info_val }}"
+    label="详情"
+    size="large"
+    title-width="3em"
+    type="textarea"
+    autosize="{{ autosize }}"
+    bind:confirm="onChange"
+  />
+
+  <text>\n\n</text>
+  <van-button block type="primary" bindtap="on_submit">确定</van-button>
+  <text>\n\n</text>
+  <van-button block type="danger" bindtap="on_delete">删除</van-button>
+</view>
+
+<van-popup
+  show="{{ site_picker_pop }}"
+  position="bottom"
+>
+  <van-picker columns="{{ site_picker_ary }}" bind:change="onChange" /> 
+</van-popup>
+
+<van-popup
+  show="{{ type_picker_pop }}"
+  position="bottom"
+>
+  <van-picker columns="{{ type_picker_ary }}" bind:change="onChange" /> 
+</van-popup>
+
+

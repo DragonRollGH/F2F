@@ -1,14 +1,28 @@
-<view class="date_view">
+<van-toast id="van-toast" />
+
+<van-popup
+  show="{{ time_picker_pop }}"
+  position="bottom"
+>
+  <van-datetime-picker
+    type="time"
+    value="{{ time_picker_val }}"
+    bind:cancel="on_cancel_time_picker"
+    bind:confirm="on_confirm_time_picker"
+  />
+</van-popup>
+
+<view class="date_view" bindlongpress="on_press_date_view">
     <text class="center date_date">{{ mm_val }} {{ dd_val }}th</text>
-    <text class="right date_no">No.{{ no_val }}</text>
+    <text class="right date_no">{{ no_val }}</text>
 </view>
 
 <view class="center time_view">
-  <view id="st" class="time_block" bindlongpress="pressToEdit">
+  <view id="st" class="time_block" bindlongpress="on_press_time_block">
     <text class="time_title">START</text>
     <text class="time_time center">{{ st_val }}</text>
   </view>
-  <view id="et" class="time_block" bindlongpress="pressToEdit">
+  <view id="et" class="time_block" bindlongpress="on_press_time_block">
     <text class="time_title">END</text>
     <text class="time_time">{{ et_val }}</text>
   </view >
@@ -16,10 +30,13 @@
 
 <view class="address_view" >
   <block wx:for="{{ ev_ary }}">
-    <view id="ev_ary.{{ index }}" class="address_card" bindlongpress="pressToEdit">
+    <view id="ev_ary.{{ index }}" class="address_card" bindlongpress="on_press_ev_card">
       <view class="address_bar"></view>
       <view class="address_text">
-        <view class="cuIcon-location address_address">{{ item.site }}</view>
+        <view class="address_address">
+          <van-icon name="location-o" />
+          {{ item.site }}
+        </view>
         <view class="address_content">{{ item.type }}</view>
         <view class="address_line"></view>
         <text class="address_detail">{{ item.info }}</text>
@@ -29,14 +46,3 @@
 </view>
 
 <button bindtap="on_tap_add_btn"> ADD </button>
-
-<van-popup
-  show="{{ time_picker_pop }}"
-  position="bottom"
->
-  <van-datetime-picker
-    type="time"
-    value="{{ time_picker_val }}"
-    bind:confirm="onInputConfirm"
-  />
-</van-popup>

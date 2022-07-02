@@ -1,12 +1,41 @@
+<van-toast id="van-toast" />
+
+<view class="container">
+  <van-button
+    plain
+    block
+    type="primary" 
+    size="large"
+    bind:click="on_click_year_btn"
+  >
+  2022
+  </van-button
+  >
+</view>
+
 <van-calendar
-  class = "tiled-calendar"
-  poppable = "{{ false }}"
-  show-title = "{{ false }}"
-  show-subtitle = "{{ false }}"
-  show-confirm = "{{ false }}"
-  min-date = "{{ mindate }}"
-  max-date = "{{ maxdate }}"
-  default-date = "{{ defaultdate }}"
-  formatter = "{{ dayFormatter }}"
-  bind:confirm = "onCalendarConfirm"
+class="tiled-calendar"
+poppable="{{ false }}"
+color="hsl(209, 62%, 49%);"
+show-title="{{ false }}"
+show-subtitle="{{ false }}"
+show-confirm="{{ false }}"
+min-date="{{ mindate }}"
+max-date="{{ maxdate }}"
+default-date="{{ defaultdate }}"
+formatter="{{ dayFormatter }}"
+bind:select="on_tap_day"
 />
+
+<van-popup
+  show="{{ year_picker_pop }}"
+  position="bottom"
+>
+  <van-picker
+    show-toolbar
+    columns="{{ year_picker_val }}"
+    default-index="{{ year_picker_dft }}"
+    bind:cancel="on_cancel_year_picker"
+    bind:confirm="on_confirm_year_picker"
+  />
+</van-popup>
