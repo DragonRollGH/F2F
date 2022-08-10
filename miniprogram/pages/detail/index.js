@@ -9,7 +9,12 @@ var arg;
 var edit_id;
 const db = wx.cloud.database();
 const DETAIL = db.collection("DETAIL");
+var unpaired_start;
 
+const TP_N = 0;
+const TP_S = 1;
+const TP_M = 2;
+const TP_E = 3;
 
 function onLoad(option) {
   page = this;
@@ -19,6 +24,7 @@ function onLoad(option) {
   arg.yy = Number(arg.yy);
   arg.mm = Number(arg.mm);
   arg.dd = Number(arg.dd);
+  arg.tp = Number(arg.tp);
   // console.log(arg);
 
   set_date_title();
@@ -70,6 +76,10 @@ function set_events_panel() {
     return;
   }
 
+  Toast.loading({
+    message: 'loading...',
+    forbidClick: true,
+  });
   DETAIL.doc(arg.d_id).get().then(res => {
     let doc = res.data;
     let datas = {};
@@ -82,6 +92,12 @@ function set_events_panel() {
     if (undefined != doc.no) {
       datas.no_val = "No." + String(doc.no);
     }
+    if (TP_S == arg.tp || TP_M == arg.tp) {
+      datas.et_val = '午夜';
+    }
+    if (TP_E == arg.tp || TP_M == arg.tp) {
+      datas.st_val = '凌晨';
+    }
     if (doc.ev) {
       // replace \n
       for (let i in doc.ev) {
@@ -91,6 +107,7 @@ function set_events_panel() {
     }
 
     page.setData(datas);
+    Toast.clear();
   });
 }
 
@@ -114,6 +131,7 @@ function init_doc() {
         yy: arg.yy,
         mm: arg.mm,
         dd: arg.dd,
+        tp: TP_N,
         d_id: d_id,
       })
       .then(res => {
@@ -238,10 +256,82 @@ function remove_ev(data) {
   });
 }
 
-function on_press_date_view(e) {
-  wx.navigateTo({
-    url: '../day_editor/index',
+function get_tp() {
+  if (undefined == arg.c_id) {
+    return undefined;
+  }
+
+  return calendar_page.get_tp({c_id: arg.c_id});
+}
+
+function get_tp_option() {
+  return new Promise((resolve, reject) => {
+    if (undefined == arg.c_id) {
+      reject(0);
+      return;
+    }
+
+    if (TP_N != get_tp()) {
+      reject(1);
+      return;
+    }
+
+    calendar_page.get_unpaired_start()
+    .then(res => {
+      if (1 == res.length) {
+        unpaired_start = res[0];
+        resolve({option: TP_E});
+      } else if (0 == res.length) {
+        resolve({option: TP_US});
+      } else {
+        reject(2);
+      }
+    })
+    .catch(res => {
+      reject(3);
+    });
   });
+}
+
+// data: {tp}
+function set_tp(data) {
+  return new Promise((resolve, reject) => {
+    if (undefined == arg.c_id) {
+      reject(0);
+      return;
+    }
+    
+    if (TP_US == data.tp) {
+      calendar_page.set_tp({
+        c_id: arg.c_id,
+        tp: data.tp, 
+      })
+      .then(res => {
+        resolve();
+      })
+      .catch(res => {
+        reject(res);
+      });
+    } else if (TP_E == data.tp) {
+      calendar_page.set_range({
+        s_c_id: unpaired_start._id,
+        e_c_id: arg.c_id,
+      })
+      .then(res => {
+        resolve();
+      })
+      .catch(res => {
+        reject(res);
+      });
+    }
+  });
+}
+
+function on_press_date_view(e) {
+  // suspend delete when delete range developing.
+  // wx.navigateTo({
+  //   url: '../day_editor/index',
+  // });
 }
 
 function on_press_time_block(e) {
@@ -324,6 +414,8 @@ Page({
   get_ev: get_ev,
   update_ev: update_ev,
   remove_ev: remove_ev,
+  get_tp_option: get_tp_option,
+  set_tp: set_tp,
   on_tap_add_btn: on_tap_add_btn,
   on_press_date_view: on_press_date_view,
   on_press_time_block: on_press_time_block,

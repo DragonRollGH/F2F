@@ -1,30 +1,39 @@
+<van-dialog id="van-dialog" />
 <van-toast id="van-toast" />
 
-<view class="container">
+<view id="calendar_option">
   <van-button
+    id="year_button"
+    color="hsl(209, 62%, 49%);"
     plain
-    block
     type="primary" 
     size="large"
     bind:click="on_click_year_btn"
   >
   2022
-  </van-button
-  >
+  </van-button>
+  <view id="switch_view">
+    <van-switch
+      active-color="hsl(209, 62%, 49%);"
+      checked="{{ range_swt_checked }}"
+      bind:change="on_click_range_swt"
+    />
+  </view>
 </view>
 
 <van-calendar
-class="tiled-calendar"
-poppable="{{ false }}"
-color="hsl(209, 62%, 49%);"
-show-title="{{ false }}"
-show-subtitle="{{ false }}"
-show-confirm="{{ false }}"
-min-date="{{ mindate }}"
-max-date="{{ maxdate }}"
-default-date="{{ defaultdate }}"
-formatter="{{ dayFormatter }}"
-bind:select="on_tap_day"
+  style="--calendar-height: {{ calendar_height }};"
+  type="{{ calendar_type }}"
+  poppable="{{ false }}"
+  color="hsl(209, 62%, 49%);"
+  show-title="{{ false }}"
+  show-subtitle="{{ false }}"
+  show-confirm="{{ false }}"
+  min-date="{{ mindate }}"
+  max-date="{{ maxdate }}"
+  default-date="{{ defaultdate }}"
+  formatter="{{ dayFormatter }}"
+  bind:select="on_tap_day"
 />
 
 <van-popup

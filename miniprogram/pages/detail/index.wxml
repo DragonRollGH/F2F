@@ -45,4 +45,16 @@
   </block>
 </view>
 
-<button bindtap="on_tap_add_btn"> ADD </button>
+<!-- <button style="margin: 20px 10px;" bindtap="on_tap_add_btn"> ADD </button> -->
+<view id="add_button_view">
+  <van-button
+    color="hsl(209, 62%, 49%);"
+    plain
+    block
+    type="primary" 
+    size="large"
+    bind:click="on_tap_add_btn"
+  >
+  ADD
+</van-button>
+</view>

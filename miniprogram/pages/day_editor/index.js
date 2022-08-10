@@ -4,40 +4,71 @@ import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
 var page;
 var pages;
 var detail_page;
+var tp_option;
 
+const TP_E = 3;
+const TP_US = 4;
 
 function onLoad(option) {
   page = this;
   pages = getCurrentPages();
   detail_page = pages.find(i => i.name == "detail");
+  if (undefined == detail_page) {
+    return;
+  }
+
+  set_tp_btn();
 }
 
-function on_submit(e) {
-  // if (undefined == idx) {
-  //   return;
-  // }
+function set_tp_btn() {
+  let on_tp_dis = false;
+  let on_tp_btn;
+  detail_page.get_tp_option()
+  .then(res => {
+    if (TP_US == res.option) {
+      tp_option = TP_US;
+      on_tp_btn = "设为多日起始日";
+    } else if (TP_E == res.option) {
+      tp_option = TP_E;
+      on_tp_btn = "设为多日结束日";
+    } else {
+      on_tp_dis = true;
+      on_tp_btn = "无法设为多日";
+    }
+    page.setData({
+      on_tp_dis: on_tp_dis,
+      on_tp_btn: on_tp_btn,
+    });
+    console.log(res);
+  })
+  .catch(res => {
+    on_tp_dis = true;
+    on_tp_btn = `无法设为多日 (err: ${res})`;
+    page.setData({
+      on_tp_dis: on_tp_dis,
+      on_tp_btn: on_tp_btn,
+    });
+    console.log(res);
+  });  
+}
 
-  // Toast.loading({
-  //   message: '更新记录中...',
-  //   forbidClick: true,
-  // });
-  // detail_page.update_ev({
-  //   idx: idx,
-  //   site: page.data.site_val,
-  //   type: page.data.type_val,
-  //   info: page.data.info_val,
-  // })
-  // .then(res => {
-  //   Toast.clear();
-  //   wx.navigateBack({
-  //     delta: 0,
-  //   });
-  // })
-  // .catch(res => {
-  //   console.log(res);
-  //   Toast.fail("更新失败！");
-  // });
-} 
+function on_tp(e) {
+  if (undefined == tp_option) {
+    Toast("err: undefined");
+    return;
+  }
+
+  detail_page.set_tp({tp: tp_option})
+  .then(res => {
+    wx.navigateBack({
+      delta: 2,
+    });
+  })
+  .catch(res => {
+    Toast(`err: ${res}`);
+  });
+}
+
 
 function on_delete(e) {
   Dialog.confirm({
@@ -67,17 +98,14 @@ function on_delete(e) {
   });
 }
 
+
 Page({
   name: "day_editor",
   data: {
-    site_picker_pop: false,
-    site_picker_ary: [
-      "E2206",
-      "东湖",
-      "淘金山"
-    ]
+    on_tp_dis: true,
+    on_tp_btn: "无法设为多日"
   },
   onLoad: onLoad,
-  on_submit: on_submit,
+  on_tp: on_tp,
   on_delete: on_delete,
 })

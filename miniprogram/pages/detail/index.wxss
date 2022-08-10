@@ -116,6 +116,6 @@ page {
   margin-top: 20rpx;
 }
 
-.tiled-calendar {
-  --calendar-height: 950rpx;
+#add_button_view {
+  margin: 40rpx 20rpx;
 }

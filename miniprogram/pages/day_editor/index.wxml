@@ -2,21 +2,8 @@
 <van-toast id="van-toast" />
 
 <view class="container">
+  <van-button block type="info" bindtap="on_tp" disabled="{{ on_tp_dis }}">{{ on_tp_btn }}</van-button>
+  <text>\n</text>
   <van-button block type="danger" bindtap="on_delete">删除</van-button>
 </view>
-
-<van-popup
-  show="{{ site_picker_pop }}"
-  position="bottom"
->
-  <van-picker columns="{{ site_picker_ary }}" bind:change="onChange" /> 
-</van-popup>
-
-<van-popup
-  show="{{ type_picker_pop }}"
-  position="bottom"
->
-  <van-picker columns="{{ type_picker_ary }}" bind:change="onChange" /> 
-</van-popup>
-
 

@@ -20,10 +20,20 @@ page {
   float: left;
 }
 
-.container {
-  margin: 20rpx;
+#calendar_option {
+  margin: 10px;
+  height: 50px;
+  display: flex;
 }
 
-.tiled-calendar {
-  --calendar-height: 450px;
+#year_button {
+  flex: 1;
+}
+
+#switch_view {
+  margin: 10px;
+}
+
+.calendar {
+  /* --calendar-height: 450px; */
 }
