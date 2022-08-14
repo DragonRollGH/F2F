@@ -10,7 +10,7 @@
     size="large"
     bind:click="on_click_year_btn"
   >
-  2022
+  {{ year_btn_val }}
   </van-button>
   <view id="switch_view">
     <van-switch

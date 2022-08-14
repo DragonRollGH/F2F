@@ -1,4 +1,5 @@
 <van-toast id="van-toast" />
+<van-dialog id="van-dialog" />
 
 <van-popup
   show="{{ time_picker_pop }}"

@@ -1,9 +1,0 @@
-<van-dialog id="van-dialog" />
-<van-toast id="van-toast" />
-
-<view class="container">
-  <van-button block type="info" bindtap="on_tp" disabled="{{ on_tp_dis }}">{{ on_tp_btn }}</van-button>
-  <text>\n</text>
-  <van-button block type="danger" bindtap="on_delete">删除</van-button>
-</view>
-

@@ -79,6 +79,7 @@ function add_doc(data) {
         mm: data.mm,
         dd: data.dd,
         d_id: data.d_id,
+        g_id: data.g_id,
       });
       reload_day_formatter();
       resolve(res);
@@ -110,13 +111,58 @@ function remove_doc(data) {
   });
 }
 
-// data: {c_id}
-function get_tp(data) {
-  if (undefined == data_ary) {
-    return undefined;
-  }
 
-  return data_ary.find(i => i._id == data.c_id).tp;
+// data: {g_id}
+function remove_range(data) {
+  return new Promise((resolve, reject) => {
+    if (undefined == data.g_id)
+    {
+      reject(0);
+      return;
+    }
+
+    CALENDAR.where({
+      g_id: data.g_id,
+    }).update({
+      data: {
+        tp: TP_N,
+        g_id: db.command.remove(),
+      }
+    })
+    .then(res => {
+      for (let i in data_ary) {
+        if (data.g_id == data_ary[i].g_id) {
+          data_ary[i].tp = TP_N;
+          delete data_ary[i].g_id;
+        }
+      }
+      reload_day_formatter();
+      resolve(res);
+    })
+    .catch(res => {
+      reject(res);
+    });
+  });
+}
+
+// data: {c_id}
+function get_range(data) {
+  return new Promise((resolve, reject) => {
+    let day = data_ary.find(i => i._id == data.c_id);
+    if (undefined == day || undefined == day.g_id) {
+      reject(0);
+    }
+
+    let group_ary = data_ary.filter(i => i.g_id == day.g_id);
+    if (1 >= group_ary.length) {
+      reject(1);
+    } else {
+      resolve({
+        len: group_ary.length,
+        g_id: day.g_id
+      });
+    }
+  });
 }
 
 function dayFormatter(day) {
@@ -230,7 +276,7 @@ function on_tap_range(e) {
         tp = TP_E;
       }
       // already exist
-      let data;
+      let data = undefined;
       if (undefined != (data = data_ary.find(
         o => date_m_ary[i].yy == o.yy 
         && date_m_ary[i].mm == o.mm 
@@ -242,7 +288,7 @@ function on_tap_range(e) {
           }
         });
         data.tp = tp;
-        data.g_id = d_id;
+        data.g_id = g_id;
         continue;
       }
       // new
@@ -314,6 +360,7 @@ function on_confirm_year_picker(e) {
     mindate: new Date(YEAR, 0, 1).getTime(),
     maxdate: YEAR == NOW.getFullYear() ? NOW.getTime() : new Date(YEAR, 11, 31).getTime(),
     year_picker_pop: false,
+    year_btn_val: YEAR,
   });
   get_data_ary();
 }
@@ -328,6 +375,7 @@ Page({
     year_picker_pop: false,
     year_picker_val: range(2017, YEAR + 1),
     year_picker_dft: YEAR - 2017,
+    year_btn_val: YEAR,
     calendar_type: "single",
     range_swt_checked: false,
   },
@@ -335,7 +383,8 @@ Page({
   onLoad: onLoad,
   add_doc: add_doc,
   remove_doc: remove_doc,
-  get_tp: get_tp,
+  remove_range: remove_range,
+  get_range: get_range,
   on_tap_day: on_tap_day,
   on_click_year_btn: on_click_year_btn,
   on_click_range_swt: on_click_range_swt,

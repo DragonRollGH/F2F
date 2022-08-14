@@ -1,5 +1,6 @@
 import "../../utils.js";
 import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
+import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
 
 
 var page;
@@ -256,82 +257,74 @@ function remove_ev(data) {
   });
 }
 
-function get_tp() {
+function on_press_date_view(e) {
   if (undefined == arg.c_id) {
-    return undefined;
+    return;
   }
 
-  return calendar_page.get_tp({c_id: arg.c_id});
-}
-
-function get_tp_option() {
-  return new Promise((resolve, reject) => {
-    if (undefined == arg.c_id) {
-      reject(0);
-      return;
-    }
-
-    if (TP_N != get_tp()) {
-      reject(1);
-      return;
-    }
-
-    calendar_page.get_unpaired_start()
+  if (undefined ==  arg.tp) {
+    Toast.fail("记录类型错误！");
+    return;
+  } else if (TP_N == arg.tp) {
+    Dialog.confirm({
+      title: '警告',
+      message: '确认删除本日数据？',
+    })
+    .then(() => {
+      // on confirm
+      Toast.loading({
+        message: '删除数据中...',
+        forbidClick: true,
+      });
+      page.remove_doc()
+      .then(res => {
+        Toast.clear();
+        wx.navigateBack({
+          delta: 1,
+        });
+      })
+      .catch(res => {
+        console.log(res);
+        Toast.fail("删除失败！");
+      });
+    })
+    .catch(() => {
+      // on cancel
+    });
+  } else {
+    calendar_page.get_range({c_id: arg.c_id})
     .then(res => {
-      if (1 == res.length) {
-        unpaired_start = res[0];
-        resolve({option: TP_E});
-      } else if (0 == res.length) {
-        resolve({option: TP_US});
-      } else {
-        reject(2);
-      }
+      Dialog.confirm({
+        title: '警告',
+        message: `确认将本组${res.len}日记录全部转为单日记录？`,
+      })
+      .then(() => {
+        // on confirm
+        Toast.loading({
+          message: '转换数据中...',
+          forbidClick: true,
+        });
+        calendar_page.remove_range({g_id: res.g_id})
+        .then(res => {
+          Toast.clear();
+          wx.navigateBack({
+            delta: 1,
+          });
+        })
+        .catch(res => {
+          console.log(res);
+          Toast.fail("转换失败！");
+        });
+      })
+      .catch(() => {
+        // on cancel
+      });
     })
     .catch(res => {
-      reject(3);
+      console.log(res);
+      Toast.fail("记录类型错误！");
     });
-  });
-}
-
-// data: {tp}
-function set_tp(data) {
-  return new Promise((resolve, reject) => {
-    if (undefined == arg.c_id) {
-      reject(0);
-      return;
-    }
-    
-    if (TP_US == data.tp) {
-      calendar_page.set_tp({
-        c_id: arg.c_id,
-        tp: data.tp, 
-      })
-      .then(res => {
-        resolve();
-      })
-      .catch(res => {
-        reject(res);
-      });
-    } else if (TP_E == data.tp) {
-      calendar_page.set_range({
-        s_c_id: unpaired_start._id,
-        e_c_id: arg.c_id,
-      })
-      .then(res => {
-        resolve();
-      })
-      .catch(res => {
-        reject(res);
-      });
-    }
-  });
-}
-
-function on_press_date_view(e) {
-  // suspend delete when delete range developing.
-  // wx.navigateTo({
-  //   url: '../day_editor/index',
-  // });
+  }
 }
 
 function on_press_time_block(e) {
@@ -414,8 +407,6 @@ Page({
   get_ev: get_ev,
   update_ev: update_ev,
   remove_ev: remove_ev,
-  get_tp_option: get_tp_option,
-  set_tp: set_tp,
   on_tap_add_btn: on_tap_add_btn,
   on_press_date_view: on_press_date_view,
   on_press_time_block: on_press_time_block,
