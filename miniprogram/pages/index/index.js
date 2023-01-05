@@ -5,7 +5,8 @@ import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
 
 
 var page;
-const db = wx.cloud.database();
+// const db = wx.cloud.database();
+const db = getApp().ali.db;
 const CALENDAR = db.collection("CALENDAR");
 const DETAIL = db.collection("DETAIL");
 
@@ -13,7 +14,7 @@ const TP_N = 0;
 const TP_S = 1;
 const TP_M = 2;
 const TP_E = 3;
-const MAX_LIMIT = 20
+const MAX_LIMIT = 400
 const NOW = new Date();
 var YEAR = NOW.getFullYear();
 const year_got = [];
@@ -33,47 +34,74 @@ function get_data_ary() {
   }
 
   Toast.loading({
+    duration: 0,
     message: 'loading...',
     forbidClick: true,
   });
-  CALENDAR.where({yy: YEAR}).count().then(async res => {
-    // console.log(res);
-    let total = res.total;
-    const batchTimes = Math.ceil(total / MAX_LIMIT);
-    for (let i = 0; i < batchTimes; i++) {
-      await CALENDAR.where({yy: YEAR}).skip(i * MAX_LIMIT).limit(MAX_LIMIT).get().then(async res => {
-        data_ary = data_ary.concat(res.data);
-      });
+
+  // =====alicloud=====
+  CALENDAR.find({
+    yy: YEAR
+  }, {
+    limit: MAX_LIMIT,
+    projection: {
+      _openid: 0,
+      auth: 0
     }
-    // got collection CALENDAR
-    // update history data without tp
-    data_ary.forEach(data => {
-      if (undefined == data.tp) {
-        data.tp = TP_N;
-        CALENDAR.doc(data._id).update({
-          data: {
-            tp: TP_N
-          }
-        });
-      }
-    });
-    // console.log(data_ary);
+  })
+  .then(res => {
+    console.log(res);
+    data_ary = data_ary.concat(res.result);
     year_got.push(YEAR);
     reload_day_formatter();
     Toast.clear();
+  })
+  .catch(res => {
+    console.error(res);
+    Toast.clear();
+    Toast.fail("读取数据库失败！");
   });
+  // =====alicloud=====
+  // =====wxcloud=====
+  // CALENDAR.where({yy: YEAR}).count().then(async res => {
+  //   // console.log(res);
+  //   let total = res.total;
+  //   const batchTimes = Math.ceil(total / MAX_LIMIT);
+  //   for (let i = 0; i < batchTimes; i++) {
+  //     await CALENDAR.where({yy: YEAR}).skip(i * MAX_LIMIT).limit(MAX_LIMIT).get().then(async res => {
+  //       data_ary = data_ary.concat(res.data);
+  //     });
+  //   }
+  //   // got collection CALENDAR
+  //   // update history data without tp
+  //   data_ary.forEach(data => {
+  //     if (undefined == data.tp) {
+  //       data.tp = TP_N;
+  //       CALENDAR.doc(data._id).update({
+  //         data: {
+  //           tp: TP_N
+  //         }
+  //       });
+  //     }
+  //   });
+  //   // console.log(data_ary);
+  //   year_got.push(YEAR);
+  //   reload_day_formatter();
+  //   Toast.clear();
+  // });
+  // =====wxcloud=====
 
 }
 
 // data: {yy,mm,dd,tp,g_id,d_id}
 function add_doc(data) {
   return new Promise((resolve, reject) => {
-    CALENDAR.add({
-      data: data
-    })
+    // CALENDAR.add({
+    CALENDAR.insertOne(data)
     .then(res => {
       data_ary.push({
-        _id: res._id,
+        // _id: res._id,
+        _id: res.result.insertedId,
         tp: data.tp,
         yy: data.yy,
         mm: data.mm,
@@ -93,11 +121,16 @@ function add_doc(data) {
 // data: {yy,mm,dd}
 function remove_doc(data) {
   return new Promise((resolve, reject) => {
-    CALENDAR.where({
+    // CALENDAR.where({
+    //   yy: data.yy,
+    //   mm: data.mm,
+    //   dd: data.dd,
+    // }).remove()
+    CALENDAR.deleteMany({
       yy: data.yy,
       mm: data.mm,
       dd: data.dd,
-    }).remove()
+    })
     .then(res => {
       data_ary = data_ary.filter(i => !(i.yy == data.yy 
         && i.mm == data.mm
@@ -121,13 +154,23 @@ function remove_range(data) {
       return;
     }
 
-    CALENDAR.where({
+    // CALENDAR.where({
+    //   g_id: data.g_id,
+    // }).update({
+    //   data: {
+    //     tp: TP_N,
+    //     g_id: db.command.remove(),
+    //   }
+    // })
+    CALENDAR.updateMany({
       g_id: data.g_id,
-    }).update({
-      data: {
+    }, {
+      $set: {
         tp: TP_N,
-        g_id: db.command.remove(),
-      }
+      },
+      $unset: {
+        g_id: "",
+      },
     })
     .then(res => {
       for (let i in data_ary) {
@@ -281,8 +324,16 @@ function on_tap_range(e) {
         o => date_m_ary[i].yy == o.yy 
         && date_m_ary[i].mm == o.mm 
         && date_m_ary[i].dd == o.dd))) {
-        CALENDAR.doc(data._id).update({
-          data: {
+        // CALENDAR.doc(data._id).update({
+        //   data: {
+        //     tp: tp,
+        //     g_id: g_id,
+        //   }
+        // });
+        CALENDAR.updateOne({
+          _id: data._id
+        }, {
+          $set: {
             tp: tp,
             g_id: g_id,
           }
@@ -292,9 +343,11 @@ function on_tap_range(e) {
         continue;
       }
       // new
-      DETAIL.add({data: {}})
+      // DETAIL.add({data: {}})
+      DETAIL.insertOne({})
       .then(res => {
-        d_id = res._id;
+        // d_id = res._id;
+        d_id: res.result.insertedId,
         page.add_doc({
           yy: date_m_ary[i].yy,
           mm: date_m_ary[i].mm,
