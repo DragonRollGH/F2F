@@ -31,6 +31,7 @@
   show-confirm="{{ false }}"
   min-date="{{ mindate }}"
   max-date="{{ maxdate }}"
+  first-day-of-week="1"
   default-date="{{ defaultdate }}"
   formatter="{{ dayFormatter }}"
   bind:select="on_tap_day"
