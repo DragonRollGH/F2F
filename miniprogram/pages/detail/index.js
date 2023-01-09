@@ -8,7 +8,10 @@ var pages;
 var calendar_page;
 var arg;
 var edit_id;
-const db = wx.cloud.database();
+
+const app = getApp();
+// const db = wx.cloud.database();
+const db = app.ali.db;
 const DETAIL = db.collection("DETAIL");
 var unpaired_start;
 
@@ -81,8 +84,12 @@ function set_events_panel() {
     message: 'loading...',
     forbidClick: true,
   });
-  DETAIL.doc(arg.d_id).get().then(res => {
-    let doc = res.data;
+  // DETAIL.doc(arg.d_id).get().then(res => {
+  DETAIL.findOne({
+    _id: arg.d_id
+  }, {})
+  .then(res => {
+    let doc = res.result;
     let datas = {};
     if (undefined != doc.st) {
       datas.st_val = doc.st.Format("hh:mm");
@@ -125,19 +132,23 @@ function init_doc() {
     });
 
     let d_id;
-    DETAIL.add({data: {}})
+    // DETAIL.add({data: {}})
+    DETAIL.insertOne({
+      _openid: app.globalData.uid,
+    })
     .then(res => {
-      d_id = res._id;
+      d_id = res.result.insertedId;
       calendar_page.add_doc({
         yy: arg.yy,
         mm: arg.mm,
         dd: arg.dd,
         tp: TP_N,
         d_id: d_id,
+        _openid: app.globalData.uid,
       })
       .then(res => {
         arg.d_id = d_id;
-        arg.c_id = res._id;
+        arg.c_id = res.result.insertedId;
         Toast.clear();
         resolve();
       });
@@ -156,7 +167,10 @@ function remove_doc() {
         return;
     }
 
-    DETAIL.doc(arg.d_id).remove()
+    // DETAIL.doc(arg.d_id).remove()
+    DETAIL.deleteMany({
+      _id: arg.d_id
+    })
     .then(res => {
       calendar_page.remove_doc({
         yy: arg.yy,
@@ -205,8 +219,11 @@ function update_ev(data) {
     for (let i in ev_ary) {
       ev_ary[i].info = ev_ary[i].info.replace('\n', '\\n');
     }
-    DETAIL.doc(arg.d_id).update({
-      data: {
+    // DETAIL.doc(arg.d_id).update({
+    DETAIL.updateMany({
+      _id: arg.d_id
+    },{
+      $set: {
         ev: ev_ary
       }
     })
@@ -240,8 +257,11 @@ function remove_ev(data) {
     for (let i in ev_ary) {
       ev_ary[i].info = ev_ary[i].info.replace('\n', '\\n');
     }
-    DETAIL.doc(arg.d_id).update({
-      data: {
+    // DETAIL.doc(arg.d_id).update({
+    DETAIL.updateMany({
+      _id: arg.d_id
+    },{
+      $set: {
         ev: ev_ary
       }
     })
@@ -355,8 +375,11 @@ function on_confirm_time_picker(e) {
     e.detail.split(':')[0],
     e.detail.split(':')[1]
   );
-  DETAIL.doc(arg.d_id).update({
-    data: {
+  // DETAIL.doc(arg.d_id).update({
+  DETAIL.updateMany({
+    _id: arg.d_id
+  },{
+    $set: {
       [`${edit_id}`]: d
     }
   });

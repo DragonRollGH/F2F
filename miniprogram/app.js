@@ -9,19 +9,21 @@ const ali = new MPServerless(wx, {
 
 App({
   ali: ali,
+  globalData: {},
   onLaunch: function () {
-    ali.init();
-
-    if (!wx.cloud) {
-      console.error('请使用 2.2.3 或以上的基础库以使用云能力')
-    } else {
-      wx.cloud.init({
-        // env: 'dev-2glgkbqf752830e7',
-        env: 'cloud1-2gzwy3rt6ca6732e',
-        traceUser: true,
+    ali.init()
+    .then(res => {
+      ali.user.getInfo()
+      .then(res => {
+        this.globalData.uid = res.result.user.oAuthUserId;
       })
-    }
+      .catch(console.error);
+    })
+    .catch(console.error);
 
-    this.globalData = {}
+    // wx.cloud.init({
+    //   env: 'cloud1-2gzwy3rt6ca6732e',
+    //   traceUser: true,
+    // })
   }
 })

@@ -5,8 +5,10 @@ import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog';
 
 
 var page;
+
+const app = getApp();
 // const db = wx.cloud.database();
-const db = getApp().ali.db;
+const db = app.ali.db;
 const CALENDAR = db.collection("CALENDAR");
 const DETAIL = db.collection("DETAIL");
 
@@ -50,7 +52,7 @@ function get_data_ary() {
     }
   })
   .then(res => {
-    console.log(res);
+    // console.log(res);
     data_ary = data_ary.concat(res.result);
     year_got.push(YEAR);
     reload_day_formatter();
@@ -58,7 +60,6 @@ function get_data_ary() {
   })
   .catch(res => {
     console.error(res);
-    Toast.clear();
     Toast.fail("读取数据库失败！");
   });
   // =====alicloud=====
@@ -344,10 +345,12 @@ function on_tap_range(e) {
       }
       // new
       // DETAIL.add({data: {}})
-      DETAIL.insertOne({})
+      DETAIL.insertOne({
+        _openid: app.globalData.uid,
+      })
       .then(res => {
         // d_id = res._id;
-        d_id: res.result.insertedId,
+        d_id = res.result.insertedId;
         page.add_doc({
           yy: date_m_ary[i].yy,
           mm: date_m_ary[i].mm,
@@ -355,6 +358,7 @@ function on_tap_range(e) {
           tp: tp,
           g_id: g_id,
           d_id: d_id,
+          _openid: app.globalData.uid,
         });
       });
     }
@@ -370,8 +374,7 @@ function on_tap_range(e) {
 }
 
 function on_tap_day(e) {
-  if (e.detail instanceof Date)
-  {
+  if (e.detail instanceof Date) {
     on_tap_single(e);
   } else if (e.detail instanceof Array) {
     if (e.detail.length == 2 && e.detail[1] != null) {
