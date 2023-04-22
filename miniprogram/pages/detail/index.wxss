@@ -2,11 +2,6 @@ page {
   background: #f6f6f6;
 }
 
-@font-face {
-  font-family: 'digital';
-  src: "font/";
-}
-
 body {
   font-family: 'customFont';
 }
