@@ -1,8 +1,10 @@
 {
   "pages": [
-    "pages/index/index",
+    "pages/calendar/index",
     "pages/detail/index",
-    "pages/ev_editor/index"
+    "pages/ev_editor/index",
+    "pages/today/index",
+    "pages/search/index"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
@@ -11,22 +13,29 @@
     "navigationBarTitleText": "JiangLai 将来",
     "navigationBarTextStyle": "black"
   },
+  "tabBar": {
+    "color": "#A9B7B7",
+    "selectedColor": "#2F80CA",
+    "backgroundColor": "#F6F6F6",
+    "borderStyle": "white",
+    "list": [{
+      "pagePath": "pages/calendar/index",
+      "iconPath": "static/calendar.png",
+      "selectedIconPath": "static/calendar_sel.png",
+      "text": "日历"
+    }, {
+      "pagePath": "pages/search/index",
+      "iconPath": "static/search.png",
+      "selectedIconPath": "static/search_sel.png",
+      "text": "搜索"
+    }]
+  },
   "sitemapLocation": "sitemap.json",
   "useExtendedLib": {
     "weui": true
   },
   "usingComponents": {
-    "van-button": "@vant/weapp/button/index",
     "van-calendar": "@vant/weapp/calendar/index",
-    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
-    "van-popup": "@vant/weapp/popup/index",
-    "van-field": "@vant/weapp/field/index",
-    "van-cell": "@vant/weapp/cell/index",
-    "van-cell-group": "@vant/weapp/cell-group/index",
-    "van-picker": "@vant/weapp/picker/index",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "van-toast": "@vant/weapp/toast/index",
-    "van-icon": "@vant/weapp/icon/index",
-    "van-switch": "@vant/weapp/switch/index"
+    "van-icon": "@vant/weapp/icon/index"
   }
 }

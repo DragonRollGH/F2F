@@ -140,7 +140,7 @@ function init_doc() {
     }
 
     wx.showLoading({
-      title: '创建中',
+      title: '创建记录中',
       mask: true,
     });
 
@@ -324,8 +324,8 @@ function on_delete(e) {
       title: '警告',
       content: `确认删除本日数据？`,
     })
-    .then(modalres => {
-      if (modalres.confirm) {
+    .then(res => {
+      if (res.confirm) {
         wx.showLoading({
           title: '删除数据中',
           mask: true,
@@ -352,8 +352,8 @@ function on_delete(e) {
         title: '警告',
         content: `确认将本组${res.len}日记录全部转为单日记录？`,
       })
-      .then(modalres => {
-        if (modalres.confirm) {
+      .then(res => {
+        if (res.confirm) {
           wx.showLoading({
             title: '转换数据中',
             mask: true,
@@ -424,23 +424,21 @@ function update_time(stet, time_val) {
 }
 
 function on_change_st(e) {
-  init_doc()
-  .then(res => {
-    page.setData({
-      time_picker_val: new Date().Format("hh:mm"),
-    });
-    update_time("st", e.detail.value);
+  console.log(`change st ${e.detail.value} ${page.data.time_picker_val}`)
+  init_doc();
+  page.setData({
+    time_picker_val: new Date().Format("hh:mm"),
   });
+  update_time("st", e.detail.value);
 }
 
 function on_change_et(e) {
-  init_doc()
-  .then(res => {
-    page.setData({
-      time_picker_val: new Date().Format("hh:mm"),
-    });
-    update_time("et", e.detail.value);
+  console.log(`change et ${e.detail.value} ${page.data.time_picker_val}`)
+  init_doc();
+  page.setData({
+    time_picker_val: new Date().Format("hh:mm"),
   });
+  update_time("et", e.detail.value);
 }
 
 function on_tap_add_ev(e) {

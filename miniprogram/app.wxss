@@ -1,0 +1,5 @@
+@import "font/digital-7_mono.wxss"
+
+page {
+    --front-color: #2F80CA;
+}

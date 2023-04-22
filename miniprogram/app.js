@@ -9,7 +9,14 @@ const ali = new MPServerless(wx, {
 
 App({
   ali: ali,
-  globalData: {},
+  globalData: {
+    front_color: "#2F80CA",
+    ali_db: {
+      calendar: "CALENDAR",
+      detail: "DETAIL",
+      info: "INFO"
+    }
+  },
   onLaunch: function () {
     ali.init()
     .then(res => {

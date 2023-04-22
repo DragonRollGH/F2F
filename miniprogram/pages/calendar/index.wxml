@@ -1,0 +1,29 @@
+
+<view class="page_container">
+  <view class="calendar_option">
+    <view class="picker">
+      <picker mode="date" fields="year" start="2017-01-01" end="2023-01-01" bindchange="on_change_year">
+        <view class="weui-form__title year">{{ year_btn_val }}</view>
+      </picker>
+    </view>
+    <view class="switch">
+      <switch color="{{ front_color }}" checked="{{ range_swt_checked }}" bindchange="on_tap_range_swt"/>
+    </view>
+  </view>
+
+  <van-calendar
+    style="--calendar-height: {{ calendar_height }};"
+    type="{{ calendar_type }}"
+    poppable="{{ false }}"
+    color="{{ front_color }}"
+    show-title="{{ false }}"
+    show-subtitle="{{ false }}"
+    show-confirm="{{ false }}"
+    min-date="{{ mindate }}"
+    max-date="{{ maxdate }}"
+    first-day-of-week="1"
+    default-date="{{ defaultdate }}"
+    formatter="{{ dayFormatter }}"
+    bind:select="on_tap_day"
+  />
+</view>

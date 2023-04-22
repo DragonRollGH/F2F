@@ -1,66 +1,37 @@
-<van-dialog id="van-dialog" />
-<van-toast id="van-toast" />
+<view class="page">
+    <form bindsubmit="on_submit">
+      <mp-form-page title="详情编辑">
+        <mp-form>
+          <mp-cells>
+              <mp-cell ext-class="weui-cell_select weui-cell_select-before">
+                  <view slot="title" style="width: 5em">
+                      <picker disabled aria-role="listbox"  bindchange="bindCountryCodeChange" value="{{countryCodeIndex}}" range="{{countryCodes}}">
+                      <view class="weui-select">地点</view>
+                      </picker>
+                  </view>
+                  <input name="site_val" class="weui-input" placeholder="请输入地点" value="{{ site_val }}"/>
+              </mp-cell>
+              <mp-cell ext-class="weui-cell_select weui-cell_select-before">
+                  <view slot="title" style="width: 5em">
+                      <picker disabled aria-role="listbox"  bindchange="bindCountryCodeChange" value="{{countryCodeIndex}}" range="{{countryCodes}}">
+                      <view class="weui-select">类型</view>
+                      </picker>
+                  </view>
+                  <input name="type_val" class="weui-input" placeholder="请输入类型" value="{{ type_val }}"/>
+              </mp-cell>
+              <mp-cell has-header="{{false}}" has-footer="{{false}}" title="详情" ext-class="">
+                  <textarea name="info_val" class="weui-textarea" placeholder="请输入详情" 	auto-height style="min-height: 8em"  value="{{ info_val }}"/>
+              </mp-cell>
+          </mp-cells>
+        </mp-form>
 
-<view class="container">
-  <van-field
-    model:value="{{ site_val }}"
-    label="地点"
-    size="large"
-    title-width="3em" 
-    center
-    use-button-slot
-  >
-    <van-button
-      slot="button"
-      icon="arrow"
-      size="small"
-    />
-  </van-field>
+        <view slot="button">
+            <button class="weui-btn" style="background-color: var(--front-color);" type="primary" form-type="submit">确定</button>
+        </view>
 
-  <van-field
-    model:value="{{ type_val }}"
-    label="类型"
-    size="large"
-    title-width="3em" 
-    center
-    use-button-slot
-    bind:confirm="onChange" 
-  >
-    <van-button
-      slot="button"
-      icon="arrow"
-      size="small"
-    />
-  </van-field>
-
-  <van-field
-    model:value="{{ info_val }}"
-    label="详情"
-    size="large"
-    title-width="3em"
-    type="textarea"
-    autosize="{{ autosize }}"
-    bind:confirm="onChange"
-  />
-
-  <text>\n\n</text>
-  <van-button block type="primary" bindtap="on_submit">确定</van-button>
-  <text>\n\n</text>
-  <van-button block type="danger" bindtap="on_delete">删除</van-button>
+        <view slot="footer">
+          <button class="mini-btn" plain type="warn" size="mini" bindtap="on_delete">删除</button>
+        </view>
+      </mp-form-page>
+    </form>
 </view>
-
-<van-popup
-  show="{{ site_picker_pop }}"
-  position="bottom"
->
-  <van-picker columns="{{ site_picker_ary }}" bind:change="onChange" /> 
-</van-popup>
-
-<van-popup
-  show="{{ type_picker_pop }}"
-  position="bottom"
->
-  <van-picker columns="{{ type_picker_ary }}" bind:change="onChange" /> 
-</van-popup>
-
-
